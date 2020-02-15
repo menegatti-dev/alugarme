@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 const api = Axios.create({
-    baseURL: "http://api.alugarme.techeasy.com.br:3131/"
+    baseURL: "http://alugar.me:3131/"
 });
 
 export default api;

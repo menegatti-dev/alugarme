@@ -6,7 +6,6 @@ const styles = StyleSheet.create({
 		backgroundColor: '#F2F2F2',
 		flexDirection: "column",
 	},
-
 	body:{
 		width: "100%",
 		height: "70%",
@@ -14,6 +13,26 @@ const styles = StyleSheet.create({
 		marginHorizontal: 30,
 		alignItems: "stretch",
 		justifyContent: "center"
+	},
+	inputArea:{
+		flexDirection: "row",
+		alignItems: "center",
+		backgroundColor: "#fff",
+		borderRadius: 25,
+		elevation: 6,
+		width: 350,
+		height: 50,
+		marginVertical: 10
+	},
+
+	inputImage: {
+		width: 20,
+		height: 20,
+		marginHorizontal: 20
+	},
+
+	inputText: {
+		flex: 1,
 	},
 
 	forgotPassword: {
@@ -51,6 +70,8 @@ const styles = StyleSheet.create({
 		color: "#0D0D0D",
 		textAlign: "right"
 	}
+
+	
 });
 
 export default styles;
