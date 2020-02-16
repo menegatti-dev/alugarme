@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
 	View, 
 	Text, 
@@ -18,28 +18,43 @@ import api from '../../services/api';
 
 
 
-export default function Login() {
-	const [email, setEmail] = useState('');
-const [senha, setSenha] = useState('');
-
-async function handleLogin() {
-	try {
-		const response = await api.post('/pessoa/sign', {
-			email,
-			senha
-		});
-		const { id, nome } = response.data;
-		try {
-			await AsyncStorage.setItem('id', id);
-			await AsyncStorage.setItem('nome', nome);
-			
-		} catch (e) {
-			alert('Async Storage');
+export default function Login({ navigation }) {
+	useEffect(() => {
+		async function getStorage() {
+			let nome = await AsyncStorage.getItem('nome');
+			let id = await AsyncStorage.getItem('id');
+			if (nome.length > 0 && id.length > 0) {
+				navigation.navigate('App');
+			}
 		}
-	} catch (error) {
-		console.log(response);
+
+		getStorage();
+	},[]);
+
+	const [email, setEmail] = useState('');
+	const [senha, setSenha] = useState('');
+
+	async function handleLogin() {
+		try {
+			const response = await api.post('/pessoa/sign', {
+				email,
+				senha
+			});
+			const { id, nome } = response.data[0];
+			console.log(response.data);
+
+			try {
+				await AsyncStorage.setItem('id', id.toString());
+				await AsyncStorage.setItem('nome', nome);
+				navigation.navigate('App');
+			} catch (e) {
+				alert('Async Storage');
+			}
+		} catch (error) {
+			console.log(response);
+		}
+
 	}
-}
 	return(
 		<View style={styles.container}>
 			<StatusBar backgroundColor="#f27405" barStyle="light-content" />
