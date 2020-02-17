@@ -23,7 +23,7 @@ export default function Login({ navigation }) {
 		async function getStorage() {
 			let nome = await AsyncStorage.getItem('nome');
 			let id = await AsyncStorage.getItem('id');
-			if (nome.length > 0 && id.length > 0) {
+			if (nome != null && id != null) {
 				navigation.navigate('App');
 			}
 		}

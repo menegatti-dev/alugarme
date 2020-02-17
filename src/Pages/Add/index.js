@@ -14,11 +14,11 @@ import MapView, {Marker} from 'react-native-maps';
 import api from '../../services/api';
 
 import styles from './styles';
-import userImage from '../../Assets/user.png';
+import logout from '../../Assets/logout.png';
 import logo from '../../Assets/alugar.me.png';
 import pinMap from '../../Assets/pinMap-black.png';
 
-export default function Add() {
+export default function Add({ navigation }) {
     const [position, setPosition] = useState({
         latitude: -17.8487964,
         longitude: -41.4927896,
@@ -27,6 +27,11 @@ export default function Add() {
     });
     const [descricao, setDescricao] = useState('');
     const [valor, setValor] = useState(0);
+
+    async function logoutUser() {
+        await AsyncStorage.clear();
+        navigation.navigate('Login');
+    }
 
     async function cadastrar() {
         let locador = parseInt(await AsyncStorage.getItem('id'));
@@ -53,7 +58,9 @@ export default function Add() {
             <View style={styles.appBar}>
                 <Image style={styles.appBarImg} source={pinMap} />
                 <Image style={styles.logo} source={logo} resizeMode="contain" />
-                <Image style={styles.appBarImg} source={userImage} />
+                <TouchableOpacity onPress={() => logoutUser()}>
+                    <Image style={styles.appBarImg} source={logout} />
+                </TouchableOpacity>
             </View>
             <View style={styles.containerMap}>
                 <MapView

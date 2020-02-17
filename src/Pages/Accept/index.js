@@ -3,6 +3,7 @@ import {
     View,
     Text, 
     FlatList,
+    TouchableOpacity,
     Image,
     StatusBar,
     Alert
@@ -13,16 +14,21 @@ import api from '../../services/api';
 import Solicitacao from '../../Components/Solicitacao';
 
 import styles from './styles';
-import userImage from '../../Assets/user.png';
+import logout from '../../Assets/logout.png';
 import logo from '../../Assets/alugar.me.png';
 import pinMap from '../../Assets/pinMap-black.png';
 
-export default function Accept() {
+export default function Accept({ navigation }) {
 
     const [solicitacoes, setSolicitacoes] = useState([]);
     useEffect(() => {
         getSolicitacoes();
     }, []);
+
+    async function logoutUser() {
+        await AsyncStorage.clear();
+        navigation.navigate('Login');
+    }
 
     async function getSolicitacoes() {
         const pessoa = await AsyncStorage.getItem('id');
@@ -49,7 +55,9 @@ export default function Accept() {
             <View style={styles.appBar}>
                 <Image style={styles.appBarImg} source={pinMap} />
                 <Image style={styles.logo} source={logo} resizeMode="contain" />
-                <Image style={styles.appBarImg} source={userImage} />
+                <TouchableOpacity onPress={() => logoutUser()}>
+                    <Image style={styles.appBarImg} source={logout} />
+                </TouchableOpacity>
             </View>
             <View>
                 <FlatList
