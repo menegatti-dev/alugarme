@@ -8,6 +8,9 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 import Login from './Pages/Login';
 import Boletos from './Pages/Boletos';
+import Accept from './Pages/Accept';
+import Add from './Pages/Add';
+import Transferencia from './Pages/Transferencia';
 import Feed from './Pages/Feed';
 const AppNavigator = createBottomTabNavigator({
     Feed:{
@@ -15,6 +18,15 @@ const AppNavigator = createBottomTabNavigator({
     },
     Boletos:{
       screen: Boletos
+    },
+    Add:{
+      screen: Add
+    },
+    Transferencia:{
+      screen: Transferencia
+    },
+    Accept:{
+      screen: Accept
     }
 },{
   initialRouteName: 'Feed',
@@ -40,6 +52,24 @@ const AppNavigator = createBottomTabNavigator({
         return <Image source={require('./Assets/barcode-focus.png')} style={{width: 31, height: 31}} />;
       } else if (routeName === 'Boletos') {
         return <Image source={require('./Assets/barcode.png')} style={{width: 31, height: 31}} />;
+      }
+
+      if (focused && routeName === 'Add') {
+        return <Image source={require('./Assets/add-focus.png')} style={{width: 40, height: 40}} />;
+      } else if (routeName === 'Add') {
+        return <Image source={require('./Assets/add.png')} style={{width: 40, height: 40}} />;
+      }
+
+      if (focused && routeName === 'Transferencia') {
+        return <Image source={require('./Assets/transferencia-focus.png')} style={{width: 31, height: 31}} />;
+      } else if (routeName === 'Transferencia') {
+        return <Image source={require('./Assets/tranferencia.png')} style={{width: 31, height: 31}} />;
+      }
+
+      if (focused && routeName === 'Accept') {
+        return <Image source={require('./Assets/accept-focus.png')} style={{width: 31, height: 31}} />;
+      } else if (routeName === 'Accept') {
+        return <Image source={require('./Assets/accept.png')} style={{width: 31, height: 31}} />;
       }
     }
   })
