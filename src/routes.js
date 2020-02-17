@@ -7,11 +7,14 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 import Login from './Pages/Login';
-import Register from './Pages/Register';
+import Boletos from './Pages/Boletos';
 import Feed from './Pages/Feed';
 const AppNavigator = createBottomTabNavigator({
     Feed:{
       screen: Feed,
+    },
+    Boletos:{
+      screen: Boletos
     }
 },{
   initialRouteName: 'Feed',
@@ -31,6 +34,12 @@ const AppNavigator = createBottomTabNavigator({
         return <Image source={require('./Assets/search-focus.png')} style={{width: 31, height: 31}} />;
       } else if (routeName === 'Feed') {
         return <Image source={require('./Assets/search.png')} style={{width: 31, height: 31}} />;
+      }
+
+      if (focused && routeName === 'Boletos') {
+        return <Image source={require('./Assets/barcode-focus.png')} style={{width: 31, height: 31}} />;
+      } else if (routeName === 'Boletos') {
+        return <Image source={require('./Assets/barcode.png')} style={{width: 31, height: 31}} />;
       }
     }
   })
