@@ -15,6 +15,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between'
     },
+    saldoArea:{
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    saldo:{
+        fontSize: 18,
+        color: "#f27405",
+        fontWeight: "bold"
+    },
+    title:{
+        fontSize: 14,
+        color: "#0d0d0d"
+    },
     logo:{
         height: 35,
         width: 150,
