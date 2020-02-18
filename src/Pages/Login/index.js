@@ -5,7 +5,8 @@ import {
 	TouchableOpacity, 
 	StatusBar, 
 	Image, 
-	TextInput
+	TextInput,
+	Alert
 } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -31,29 +32,30 @@ export default function Login({ navigation }) {
 		getStorage();
 	},[]);
 
+	function navigateRegister(){
+		navigation.navigate('Register');
+	}
+
 	const [email, setEmail] = useState('');
 	const [senha, setSenha] = useState('');
 
 	async function handleLogin() {
-		try {
-			const response = await api.post('/pessoa/sign', {
-				email,
-				senha
-			});
-			const { id, nome } = response.data[0];
-			console.log(response.data);
+		
+		await api.post('/pessoa/sign', {
+			email,
+			senha
+		}).then(async(response)=>{
 
-			try {
-				await AsyncStorage.setItem('id', id.toString());
-				await AsyncStorage.setItem('nome', nome);
-				navigation.navigate('App');
-			} catch (e) {
-				alert('Async Storage');
-			}
-		} catch (error) {
-			console.log(response);
-		}
+			await AsyncStorage.setItem('id', response.data[0].id.toString());
+			await AsyncStorage.setItem('nome', response.data[0].nome.toString());
+			navigation.navigate('App');
 
+		}).catch((error)=>{
+
+			Alert.alert("Erro", error.response.data.message);
+
+		});
+		
 	}
 	return(
 		<View style={styles.container}>
@@ -88,7 +90,7 @@ export default function Login({ navigation }) {
 				<TouchableOpacity style={styles.btnSubmit} onPress={() => handleLogin()}>
 					<Text style={styles.btnText}>LOGIN</Text>
 				</TouchableOpacity>
-				<TouchableOpacity style={styles.register}>
+				<TouchableOpacity style={styles.register} onPress={() => navigateRegister()}>
 					<Text style={styles.registerText}>Não tem uma conta? </Text>
 					<Text style={styles.registerLink}>Registre-se</Text>
 				</TouchableOpacity>

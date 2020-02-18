@@ -20,19 +20,38 @@ const styles = StyleSheet.create({
         borderTopRightRadius:5,
         marginBottom: 3
     },
-    infos:{
+    areaInfo:{
         flex: 1,
+        flexDirection: 'row',
         paddingHorizontal: 10,
     },
+    infos:{
+        width: "60%",
+    },
+
     preco:{
         color: "#f27405",
         fontSize: 16,
 
     },
-    descricao:{
-        color: "#0D0D0D",
-        fontSize: 15
+    btnArea:{
+        height: "100%",
+        width: "40%",
+        alignItems: "center",
+        justifyContent: "center",
     },
+    btnSolicitar:{
+        height: 30,
+        width: "95%",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 6,
+        backgroundColor: "#f27405",
+    },
+    btnText:{
+        color: "#f2f2f2",
+    },
+
     endereco:{
         color: "#F2B279",
         fontSize: 14

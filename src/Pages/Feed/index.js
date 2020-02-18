@@ -5,12 +5,15 @@ import {
     TouchableOpacity,
     Image,
     StatusBar,
-    FlatList
+    FlatList,
+    PermissionsAndroid,
+    Alert
 } from "react-native";
 
 import Slider from '@react-native-community/slider';
 import AsyncStorage from '@react-native-community/async-storage';
 import api from '../../services/api';
+import Geolocation from '@react-native-community/geolocation';
 
 import styles from './styles';
 import Imovel from '../../Components/Imovel';
@@ -18,7 +21,27 @@ import logout from '../../Assets/logout.png';
 import logo from '../../Assets/alugar.me.png';
 import pinMap from '../../Assets/pinMap-black.png';
 
+
+
 export default function Feed({ navigation }) {
+
+    async function requestLocationPermission() 
+    {
+    try {
+        const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+            'title': 'alugar.me',
+            'message': 'alugar.me quer usar sua localização'
+        }
+        )
+        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+            alert("O acesso a localização foi negado!");
+        }
+    } catch (err) {
+        console.warn(err)
+    }
+    }
 
     const [latitude, setLatitude] = useState(0.0);
     const [longitude, setLongitude] = useState(0.0);
@@ -26,23 +49,52 @@ export default function Feed({ navigation }) {
     const [locais, setLocais] = useState();
 
     useEffect(() => {
-         loadLocais();
-    },[]);
+        async function loadMap(){
 
+            await api.get('/imovel', {
+                params:{
+                    latitude: parseFloat(latitude),
+                    longitude: parseFloat(longitude),
+                    raio: parseInt(raio),
+                }
+            }).then((response)=>{
 
-    // useEffect(()=>{
-    //     setLocais(loadLocais());
-    // },[raio]);
+                setLocais(response.data);
+
+            }).catch((error)=>{
+
+                setLocais([]); 
+
+            });
+            
+        }
+        if(latitude != 0 && longitude != 0 && raio > 0){ 
+            
+            loadMap();
+        
+        }
+   },[latitude, longitude, raio]);
+   
+   useEffect(() => {
+       loadLocais();
+   }, []);
+    
 
     async function loadLocais() {
-        const response = await api.get('/imovel', {
-            params:{
-                latitude: -17.8487964,
-                longitude: -41.4827896,
-                raio: 10,
-            }
-        });
-        setLocais(response.data);
+        await requestLocationPermission();
+        Geolocation.getCurrentPosition((info) => {
+            setLatitude(info.coords.latitude);
+            setLongitude(info.coords.longitude);
+
+        },(error) => {
+            Alert.alert("Erro:", error);
+        },{
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 10000
+        }
+        
+        );
     }
 
     async function logoutUser() {
@@ -64,7 +116,7 @@ export default function Feed({ navigation }) {
                     data={locais}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({item}) => {
-                        return (<Imovel data={item}/>);
+                        return (<Imovel data={item} navigation={navigation}/>);
                     }}
                 />
             <View style={styles.raio}>

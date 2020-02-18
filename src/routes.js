@@ -5,13 +5,15 @@ import {
 
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-
 import Login from './Pages/Login';
 import Boletos from './Pages/Boletos';
 import Accept from './Pages/Accept';
 import Add from './Pages/Add';
 import Transferencia from './Pages/Transferencia';
 import Feed from './Pages/Feed';
+import NovaSolicitacao from './Pages/NovaSolicitacao';
+import Register from './Pages/Register';
+
 const AppNavigator = createBottomTabNavigator({
     Feed:{
       screen: Feed,
@@ -27,7 +29,7 @@ const AppNavigator = createBottomTabNavigator({
     },
     Accept:{
       screen: Accept
-    }
+    },
 },{
   initialRouteName: 'Feed',
   tabBarOptions:{
@@ -75,11 +77,15 @@ const AppNavigator = createBottomTabNavigator({
   })
 });
 
+
+
 const routes = createAppContainer(
   createSwitchNavigator(
     {
       Login: Login,
       App: AppNavigator,
+      NovaSolicitacao: NovaSolicitacao,
+      Register: Register
     },
     {
       initialRouteName: 'Login',

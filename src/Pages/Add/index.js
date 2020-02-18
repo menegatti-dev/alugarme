@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -6,10 +6,12 @@ import {
     StatusBar,
     TextInput,
     TouchableOpacity,
-    Alert
+    Alert,
+    PermissionsAndroid
 } from 'react-native';
 
 import AsyncStorage from '@react-native-community/async-storage';
+import Geolocation from '@react-native-community/geolocation';
 import MapView, {Marker} from 'react-native-maps';
 import api from '../../services/api';
 
@@ -19,14 +21,66 @@ import logo from '../../Assets/alugar.me.png';
 import pinMap from '../../Assets/pinMap-black.png';
 
 export default function Add({ navigation }) {
+       
+
+    async function requestLocationPermission() {
+
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                {
+                    'title': 'alugar.me',
+                    'message': 'alugar.me quer usar sua localização'
+                }
+            )
+            if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+                alert("O acesso a localização foi negado!");
+            }
+        } catch (err) {
+            console.warn(err)
+        }
+
+    }
+
+    async function loadMap() {
+        await requestLocationPermission();
+
+        Geolocation.getCurrentPosition((info) => {
+
+            setPosition({
+                ...position, 
+                latitude: info.coords.latitude,
+                longitude: info.coords.longitude,
+
+            });
+
+        },(error) => {
+            Alert.alert("Erro:", error);
+        },{
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 10000
+        }
+        
+        );
+    }
+
+    useEffect(()=>{
+
+        loadMap();
+
+    }, []);
+    
+    
+
     const [position, setPosition] = useState({
-        latitude: -17.8487964,
-        longitude: -41.4927896,
+        latitude: 0.0,
+        longitude: 0.0,
         latitudeDelta: 0.003,
         longitudeDelta: 0.003,
     });
     const [descricao, setDescricao] = useState('');
-    const [valor, setValor] = useState(0);
+    const [valor, setValor] = useState('');
 
     async function logoutUser() {
         await AsyncStorage.clear();
@@ -35,7 +89,6 @@ export default function Add({ navigation }) {
 
     async function cadastrar() {
         let locador = parseInt(await AsyncStorage.getItem('id'));
-        try {
             if (valor <= 0) {
                 return Alert.alert("Atenção","Valor não pode ser menor ou igual a 0");
             }
@@ -45,12 +98,18 @@ export default function Add({ navigation }) {
                 latitude: position.latitude.toString(),
                 longitude: position.longitude.toString(),
                 locador: locador
+            }).then((response)=>{
+
+                Alert.alert("Atenção", response.data.message);
+                setDescricao('');
+                setValor('');
+
+            }).catch((err)=>{
+
+                Alert.alert("Erro", err.response.data.message);
+
             });
-            setDescricao('');
-            setValor(0);
-        } catch (error) {
-            Alert.alert("Atenção","Erro ao Cadastrar Imovel");
-        }
+            
     }
     return(
         <View style={styles.container}>
@@ -79,8 +138,8 @@ export default function Add({ navigation }) {
                         pinColor="#f27405"
                         style={{height: 3, width: 3}}
                         coordinate={position}
-                        title={'Marcador'}
-                        description={'Testando o marcador no mapa'}
+                        title={'Local atual'}
+                        description={'Selecione o local do imovel!'}
                         />
                 </MapView>
             </View>
