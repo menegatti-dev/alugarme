@@ -36,7 +36,16 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginHorizontal: 10,
         justifyContent: 'space-between'
-    }
+    },
+    loading:{
+
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center"
+
+    },
+
+    
 
 });
 

@@ -5,6 +5,7 @@ import {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        width: '100%',        
         height: 'auto',
     },
     containerMap: {
@@ -17,6 +18,7 @@ const styles = StyleSheet.create({
         width: '100%',
       },
       formulario:{
+          width: '90%',
           alignItems: "center",
           justifyContent: 'center',
           marginHorizontal: 10,
@@ -33,7 +35,7 @@ const styles = StyleSheet.create({
           justifyContent: 'space-between',
       },
       data:{
-        width: 120,
+        width: '28%',
         height: 40,
         paddingHorizontal: 10,
         marginHorizontal: 10,
@@ -53,19 +55,19 @@ const styles = StyleSheet.create({
         elevation: 1
       },
       btnSubmit:{
-		width: "90%",
-		height: 50,
-		alignItems: "center",
-		justifyContent: "center",
-		backgroundColor: "#f27405",
-		borderRadius: 25,
-		elevation: 6,
-		marginTop: 80,
-	}, btnText:{
-		color: "#f2f2f2",
-		fontSize: 18,
-		fontWeight: "bold"
-	},
+        width: "90%",
+        height: 50,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#f27405",
+        borderRadius: 25,
+        elevation: 6,
+        marginTop: 10,
+      }, btnText:{
+        color: "#f2f2f2",
+        fontSize: 18,
+        fontWeight: "bold"
+      },
 });
 
 export default styles;

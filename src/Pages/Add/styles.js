@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#f27405",
 		borderRadius: 25,
 		elevation: 6,
-		marginVertical: 80,
+		marginTop: 10,
 	}, btnText:{
 		color: "#f2f2f2",
 		fontSize: 18,

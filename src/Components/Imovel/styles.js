@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     infos:{
-        width: "60%",
+        width: "55%",
     },
 
     preco:{
@@ -36,20 +36,22 @@ const styles = StyleSheet.create({
     },
     btnArea:{
         height: "100%",
-        width: "40%",
+        width: "45%",
         alignItems: "center",
         justifyContent: "center",
     },
     btnSolicitar:{
-        height: 30,
-        width: "95%",
+        width: "100%",
+        height: 40,        
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 6,
         backgroundColor: "#f27405",
     },
     btnText:{
+        fontSize: 12,
         color: "#f2f2f2",
+        alignItems: 'center'
     },
 
     endereco:{

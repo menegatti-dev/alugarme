@@ -2,16 +2,18 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
 	container:{
+
 		flex: 1,
 		backgroundColor: '#F2F2F2',
 		flexDirection: "column",
 	},
 	body:{
-		width: "100%",
-		height: "70%",
+		flex: 1,
+		width: '90%',
+		height: "90%",
 		backgroundColor: '#F2F2F2',
 		marginHorizontal: 30,
-		alignItems: "stretch",
+		alignItems: "center",
 		justifyContent: "center"
 	},
 	inputArea:{
@@ -20,7 +22,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 		borderRadius: 25,
 		elevation: 6,
-		width: 350,
+		width: '90%',
 		height: 50,
 		marginVertical: 10
 	},
@@ -33,15 +35,16 @@ const styles = StyleSheet.create({
 
 	inputText: {
 		flex: 1,
+		width: 'auto'
 	},
 
 	forgotPassword: {
 		textAlign: "right",
-		width: 350,
+		width: '90%',
 		color: "#F2B279"
 	},
 	btnSubmit:{
-		width: 350,
+		width: '90%',
 		height: 50,
 		alignItems: "center",
 		justifyContent: "center",
@@ -55,7 +58,7 @@ const styles = StyleSheet.create({
 		fontWeight: "bold"
 	},
 	register:{
-		width: 350,
+		width: '90%',
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",

@@ -22,8 +22,11 @@ export default function Accept({ navigation }) {
 
     const [solicitacoes, setSolicitacoes] = useState([]);
     useEffect(() => {
+
         getSolicitacoes();
+
     }, []);
+    
 
     async function logoutUser() {
         await AsyncStorage.clear();
@@ -31,22 +34,26 @@ export default function Accept({ navigation }) {
     }
 
     async function getSolicitacoes() {
+
         const pessoa = await AsyncStorage.getItem('id');
-        try {
-            const response = await api.get('/locacao/', {
-                params:{
-                    pessoa: parseInt(pessoa),
-                }
-            });
-            if (response.data) {
-                setSolicitacoes(response.data);
-            } else {
-                setSolicitacoes([])
+
+        await api.get('/locacao', {
+            params:{
+                pessoa: parseInt(pessoa),
             }
-        } catch (error) {
+        }).then((response)=>{
+
+            setSolicitacoes(response.data);
+
+        })  
+        .catch((err)=>{
+
+            Alert.alert('Atenção', err.response.data.message);
             setSolicitacoes([]);  
-            Alert.alert('Atenção','Não foi encontrados solicitações pendentes');
-        }
+            navigation.navigate('Feed');
+
+        });
+       
     };
     
     return(

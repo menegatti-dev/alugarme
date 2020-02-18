@@ -17,8 +17,6 @@ import password from '../../Assets/password.png';
 import Header from '../../Components/Header';
 import api from '../../services/api';
 
-
-
 export default function Login({ navigation }) {
 	useEffect(() => {
 		async function getStorage() {

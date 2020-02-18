@@ -7,7 +7,7 @@ import {
     TextInput,
     TouchableOpacity,
     Alert,
-    PermissionsAndroid
+    KeyboardAvoidingView
 } from 'react-native';
 
 import AsyncStorage from '@react-native-community/async-storage';
@@ -19,60 +19,39 @@ import styles from './styles';
 import logout from '../../Assets/logout.png';
 import logo from '../../Assets/alugar.me.png';
 import pinMap from '../../Assets/pinMap-black.png';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function Add({ navigation }) {
        
-
-    async function requestLocationPermission() {
-
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                {
-                    'title': 'alugar.me',
-                    'message': 'alugar.me quer usar sua localização'
-                }
-            )
-            if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-                alert("O acesso a localização foi negado!");
-            }
-        } catch (err) {
-            console.warn(err)
-        }
-
-    }
-
-    async function loadMap() {
-        await requestLocationPermission();
-
-        Geolocation.getCurrentPosition((info) => {
-
-            setPosition({
-                ...position, 
-                latitude: info.coords.latitude,
-                longitude: info.coords.longitude,
-
-            });
-
-        },(error) => {
-            Alert.alert("Erro:", error);
-        },{
-            enableHighAccuracy: true,
-            timeout: 20000,
-            maximumAge: 10000
-        }
-        
-        );
-    }
-
     useEffect(()=>{
+        
+        Geolocation.getCurrentPosition(
 
-        loadMap();
+            (pos) => {
 
-    }, []);
+                const currentLongitude = pos.coords.longitude;
+                const currentLatitude  = pos.coords.latitude;
+
+                setPosition({
+
+                    ...position,
+                    latitude: currentLatitude,
+                    longitude: currentLongitude
+
+                });
+                
+            },
+            (error) => Alert.alert("Erro", error.message),
+            { 
+
+                enableHighAccuracy: false, timeout: 120000, maximumAge: 1000 
+               
+            }
+         );        
+
+    },[]);
+       
     
-    
-
     const [position, setPosition] = useState({
         latitude: 0.0,
         longitude: 0.0,
@@ -80,7 +59,7 @@ export default function Add({ navigation }) {
         longitudeDelta: 0.003,
     });
     const [descricao, setDescricao] = useState('');
-    const [valor, setValor] = useState('');
+    const [valor, setValor] = useState();
 
     async function logoutUser() {
         await AsyncStorage.clear();
@@ -103,6 +82,7 @@ export default function Add({ navigation }) {
                 Alert.alert("Atenção", response.data.message);
                 setDescricao('');
                 setValor('');
+                navigation.navigate('Feed');
 
             }).catch((err)=>{
 
@@ -112,55 +92,57 @@ export default function Add({ navigation }) {
             
     }
     return(
-        <View style={styles.container}>
-            <StatusBar backgroundColor="#f2f2f2" barStyle="dark-content" />
-            <View style={styles.appBar}>
-                <Image style={styles.appBarImg} source={pinMap} />
-                <Image style={styles.logo} source={logo} resizeMode="contain" />
-                <TouchableOpacity onPress={() => logoutUser()}>
-                    <Image style={styles.appBarImg} source={logout} />
-                </TouchableOpacity>
-            </View>
-            <View style={styles.containerMap}>
-                <MapView
-                    style={styles.map}
-                    region={position}
-                    showsUserLocation={true}
-                    
-                    onPress={e =>
-                    setPosition({
-                        ...position,
-                        latitude: e.nativeEvent.coordinate.latitude,
-                        longitude: e.nativeEvent.coordinate.longitude,
-                    })
-                    }>
-                        <Marker
-                        pinColor="#f27405"
-                        style={{height: 3, width: 3}}
-                        coordinate={position}
-                        title={'Local atual'}
-                        description={'Selecione o local do imovel!'}
-                        />
-                </MapView>
-            </View>
-            <View style={styles.infos}>
-            <TextInput 
-                    style={styles.descricao} 
-                    value={descricao} 
-                    placeholder="Descrição do imovel" 
-                    onChangeText={text => setDescricao(text)}  
-                />
+
+        <ScrollView>
+            <KeyboardAvoidingView style={styles.container}>
+                <StatusBar backgroundColor="#f2f2f2" barStyle="dark-content" />
+                <View style={styles.appBar}>
+                    <Image style={styles.appBarImg} source={pinMap} />
+                    <Image style={styles.logo} source={logo} resizeMode="contain" />
+                    <TouchableOpacity onPress={() => logoutUser()}>
+                        <Image style={styles.appBarImg} source={logout} />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.containerMap}>
+                    <MapView
+                        style={styles.map}
+                        region={position}
+                        showsUserLocation={true}
+                        
+                        onPress={e =>
+                        setPosition({
+                            ...position,
+                            latitude: e.nativeEvent.coordinate.latitude,
+                            longitude: e.nativeEvent.coordinate.longitude,
+                        })
+                        }>
+                            <Marker
+                            pinColor="#f27405"
+                            coordinate={position}
+                            title={'Local atual'}
+                            description={'Selecione o local do imovel!'}
+                            />
+                    </MapView>
+                </View>
+                <View style={styles.infos}>
                 <TextInput 
-                    style={styles.descricao} 
-                    value={valor.toString()} 
-                    placeholder="Valor desejado" 
-                    keyboardType="numeric"
-                    onChangeText={value => setValor(value)} 
-                />
-                <TouchableOpacity style={styles.btnSubmit} onPress={() => cadastrar()}>
-					<Text style={styles.btnText}>CADASTRAR LOCAL</Text>
-				</TouchableOpacity>
-            </View>
-        </View>
+                        style={styles.descricao} 
+                        value={descricao} 
+                        placeholder="Descrição do imovel" 
+                        onChangeText={text => setDescricao(text)}  
+                    />
+                    <TextInput 
+                        style={styles.descricao} 
+                        value={valor} 
+                        placeholder="Valor desejado" 
+                        keyboardType="decimal-pad"
+                        onChangeText={value => setValor(value)} 
+                    />
+                    <TouchableOpacity style={styles.btnSubmit} onPress={() => cadastrar()}>
+                        <Text style={styles.btnText}>CADASTRAR LOCAL</Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
+        </ScrollView>
     );
 }

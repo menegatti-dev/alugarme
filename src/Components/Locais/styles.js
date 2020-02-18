@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     img:{ 
         width: 20,
         height: 20,
-        marginLeft: 200,
+        marginLeft: '70%',
      },
     textStatus:{
         color: "#f2f2f2",

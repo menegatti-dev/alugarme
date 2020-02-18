@@ -156,6 +156,19 @@ export default function NovaSolicitacao({ navigation }) {
                 <TouchableOpacity style={styles.btnSubmit} onPress={() => solicitar()}>
                     <Text style={styles.btnText}>SOLICITAR LOCAÇÃO</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity 
+                
+                onPress={()=>{
+
+                    navigation.navigate('Feed');
+
+                }}
+
+                style={{marginTop: 20, marginBottom: 30}}>
+                    <Text>Voltar</Text>
+                </TouchableOpacity>
+
             </KeyboardAvoidingView>
         </ScrollView>
     );
